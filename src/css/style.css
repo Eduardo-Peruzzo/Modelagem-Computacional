@@ -1,0 +1,11 @@
+body {
+    background: rgb(0,0,0);
+    background: linear-gradient(29deg, rgba(0,0,0,1) 0%, rgba(209,0,247,1) 95%);
+    width: 100vw;
+    height: 100vh;
+}
+
+h1 {
+    text-align: center;
+    color: aqua;
+}
