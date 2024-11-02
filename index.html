@@ -6,15 +6,21 @@
     <title>Modelagem Computacional</title>
     <link rel="stylesheet" href="src/css/style.css">
     <script type="text/javascript" src="src/js/script.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
 </head>
 <body>
-    <main>
-        <h1>Sistema de cálculo numérico</h1>
-        <p>Sistema criado por Eduardo Barros Peruzzo, Vinicius da Luz Lima Cabral Pinto e Pedro dos Santos Carlos da Silva. O sistema calcula automáticamente uma expressão numérica utilizando os métodos de falsa-posição e secante.</p>
-            <form action="">
-                <input type="text" name="funcao" id="funcao" required placeholder="Digite a função">
-            </form>
-        <iframe src="https://www.geogebra.org/calculator/aybfevkb?embed" width="600" height="400" allowfullscreen style="border: 1px solid #e4e4e4;border-radius: 4px;" frameborder="0"></iframe>
-    </main>
+        <div class="container">
+            <h1>Calculadora de Função Matemática</h1>
+            <label for="funcInput">Insira a função f(x):</label>
+            <input type="text" id="funcInput" placeholder="Ex: x^3 - 9*x + 3">
+            <button onclick="saveFunction()">Salvar Função</button>
+
+            <h2>Calcular valor para f(x)</h2>
+            <label for="xInput">Digite o valor de x:</label>
+            <input type="number" id="xInput" placeholder="Ex: 5">
+            <button onclick="calculateValue()">Calcular</button>
+
+            <p id="result"></p>
+        </div>
 </body>
 </html>
