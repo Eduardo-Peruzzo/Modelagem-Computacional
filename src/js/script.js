@@ -1,7 +1,7 @@
 window.onload = function() {
     setTimeout(() => {
         window.scrollTo(0, 0);
-    }, 200);
+    }, 1000);
 };
 
 let funcao;  // Variável para armazenar a função
@@ -29,8 +29,11 @@ botaoValores.addEventListener("click", (event) => {
             let resultado = document.getElementById("resultado")
             resultado.innerText = "Raiz da função: " + raiz
             document.querySelector(".mensagem").textContent = ""
-
-            grafico(raiz, y)
+            console.log(raiz)
+            if (typeof(raiz) === "number") {
+                grafico(raiz, y)
+            }
+            
         }
 
         if (metodo === "secante") {
@@ -120,11 +123,11 @@ function falsaPosicao(a, b, iter, iterMax, erro) {
             }
 
         } else {
-            return ("Pontos inválidos, não possuem sinais opostos.");
+            return (["Pontos inválidos, não possuem sinais opostos."]);
         }
     }
 
-    return ("Número máximo de iterações atingido.");
+    return (["Número máximo de iterações atingido."]);
 }
 
 function secante(a, b, iter, iterMax, erro) {
