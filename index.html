@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,20 +8,59 @@
     <link rel="stylesheet" href="src/css/style.css">
     <script type="text/javascript" src="src/js/script.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-1.35.2.min.js"></script>
 </head>
+
 <body>
-        <div class="container">
-            <h1>Calculadora de Função Matemática</h1>
-            <label for="funcInput">Insira a função f(x):</label>
-            <input type="text" id="funcInput" placeholder="Ex: x^3 - 9*x + 3">
-            <button onclick="saveFunction()">Salvar Função</button>
+    <main class="container">
+        <h1>Sistema de Cálculo Numérico</h1>
+        <div id="container-principal">
+            <div id="div-funcao">
+                <div id="metodo">
+                    <h2>Selecione o método a ser usado</h2>
 
-            <h2>Calcular valor para f(x)</h2>
-            <label for="xInput">Digite o valor de x:</label>
-            <input type="number" id="xInput" placeholder="Ex: 5">
-            <button onclick="calculateValue()">Calcular</button>
+                    <input type="radio" name="metodo" value="falsa-posicao" onclick="escolherMetodo()"> Falsa Posição
+                    <input type="radio" name="metodo" value="secante" onclick="escolherMetodo()"> Secante
 
-            <p id="result"></p>
+                </div>
+                <div id="funcao">
+                    <h2>Insira os valores</h2>
+                    <label for="funcaoInput">Insira a função f(x):</label>
+                    <input required type="text" id="funcaoInput" placeholder="Ex: x^3 - 9*x + 3">
+                    <button onclick="guardarFuncao()">Salvar Função</button>
+                    <p class="mensagem"></p>
+                </div>
+            </div>
+
+            <div id="valores">
+                <form action="">
+                    <h2>Insira os valores:</h2>
+                    <label for="aInput">Digite o valor do ponto a:</label>
+                    <input required type="number" id="aInput" placeholder="Ex: 5">
+                    <br>
+                    <label for="bInput">Digite o valor do ponto b:</label>
+                    <input required type="number" id="bInput" placeholder="Ex: 8">
+                    <br>
+                    <label for="iterInput">Digite a iteração atual:</label>
+                    <input required type="number" id="iterInput" placeholder="Ex: 0">
+                    <br>
+                    <label for="iterMaxInput">Digite o máximo de iterações:</label>
+                    <input required type="number" id="iterMaxInput" placeholder="Ex: 15">
+                    <br>
+                    <label for="erroInput">Digite o erro:</label>
+                    <input required type="text" id="erroInput" placeholder="Ex: 10^-2">
+                    <button type="submit" id="btn-enviar">Enviar valores</button>
+                </form>
+                <p class="mensagem-valores"></p>
+                <p id="resultado"></p>
+            </div>
         </div>
+
+        <div id="plot"></div>
+
+        <iframe src="https://www.geogebra.org/calculator/yu9hjxp3?embed" width="100%" height="600" allowfullscreen
+            style="border: 1px solid #e4e4e4;border-radius: 4px;" frameborder="0"></iframe>
+    </main>
 </body>
+
 </html>
