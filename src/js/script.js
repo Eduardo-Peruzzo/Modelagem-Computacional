@@ -16,6 +16,8 @@ botaoValores.addEventListener("click", (event) => {
     if (funcao) {
         let a = Number(document.getElementById("aInput").value);
         let b = Number(document.getElementById("bInput").value);
+        let xi = Number(document.getElementById("xiInput").value);
+        let xiMenos1 = Number(document.getElementById("xi-1Input").value);
         let iter = Number(document.getElementById("iterInput").value);
         let iterMax = Number(document.getElementById("iterMaxInput").value);
         let erro = document.getElementById("erroInput").value;
@@ -41,7 +43,7 @@ botaoValores.addEventListener("click", (event) => {
         }
 
         if (metodo === "secante") {
-            let [raiz, y, msg] = secante(a, b, iter, iterMax, erro);
+            let [raiz, y, msg] = secante(xi, xiMenos1, iter, iterMax, erro);
 
             mensagem.innerText = msg
             if (raiz != "") {
@@ -101,6 +103,16 @@ function resultadoFuncao(valor) {
 function escolherMetodo() {
     try {
         const metodo = document.querySelector('input[name="metodo"]:checked').value;
+
+        if (metodo == "falsa-posicao") {
+            document.getElementById("falsa-posicao").style.display = "flex"
+            document.getElementById("secante").style.display = "none"
+        }
+        if (metodo == "secante") {
+            document.getElementById("secante").style.display = "flex"
+            document.getElementById("falsa-posicao").style.display = "none"
+        }
+
         return (metodo)
     } catch (error) {
         mensagem.innerText = "Escolha um método!"
@@ -120,8 +132,8 @@ function falsaPosicao(a, b, iter, iterMax, erro) {
             let fx = resultadoFuncao(xAtual);
 
             if (iter > 0) {
-                if ((Math.abs(xAtual - xAnterior) / xAtual)*100 < erro) {
-                    return ([xAtual, fx, `Na ${iter}° iteração o erro é menor que o critério de parada: ${Math.abs(xAtual - xAnterior) / xAtual} < ${erro}`]);
+                if ((Math.abs(xAtual - xAnterior) / xAtual) * 100 < erro) {
+                    return ([xAtual, fx, `Na ${iter}° iteração o erro é menor que o critério de parada: ${(Math.abs(xAtual - xAnterior) / xAtual)*100} < ${erro}`]);
                 }
             }
 
@@ -136,11 +148,29 @@ function falsaPosicao(a, b, iter, iterMax, erro) {
         }
     }
 
-    return (["", "", `Número máximo de iterações atingido, porém o erro ainda é maior que o critério de parada: ${Math.abs(xAtual - xAnterior) / xAtual} > ${erro}`]);
+    return (["", "", `Número máximo de iterações atingido, porém o erro ainda é maior que o critério de parada: ${(Math.abs(xAtual - xAnterior) / xAtual)*100} > ${erro}`]);
 }
 
-function secante(a, b, iter, iterMax, erro) {
+function secante(xi, xiMenos1, iter, iterMax, erro) {
+    let xiMais1;
 
+    for (iter; iter <= iterMax; iter++) {
+        let fxi = resultadoFuncao(xi);
+        let fxiMenos1 = resultadoFuncao(xiMenos1);
+
+
+        xiMais1 = xi - ((fxi) * (xi - xiMenos1)) / (fxi - fxiMenos1)
+        let fxiMais1 = resultadoFuncao(xiMais1);
+
+        if ((Math.abs(xiMais1 - xi) / xiMais1) * 100 < erro) {
+            return ([xiMais1, fxiMais1, `Na ${iter}° iteração o erro é menor que o critério de parada: ${(Math.abs(xiMais1 - xi) / xiMais1)*100} < ${erro}`]);
+        }
+
+        xiMenos1 = xi
+        xi = xiMais1
+    }
+
+    return (["", "", `Número máximo de iterações atingido, porém o erro ainda é maior que o critério de parada: ${(Math.abs(xiMais1 - xi) / xiMais1)*100} > ${erro}`]);
 }
 
 function grafico(raiz, y) {

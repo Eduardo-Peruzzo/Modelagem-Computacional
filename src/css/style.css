@@ -76,6 +76,22 @@ h1 {
     min-height: 12em;
 }
 
+#falsa-posicao {
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#secante {
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 input, button {
     margin: 10px 0;
     padding: 8px;
