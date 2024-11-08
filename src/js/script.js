@@ -1,10 +1,12 @@
-window.onload = function() {
+window.onload = function () {
     setTimeout(() => {
         window.scrollTo(0, 0);
     }, 1000);
 };
 
 let funcao;  // Variável para armazenar a função
+let mensagem = document.getElementById("resultado-mensagem") // mensagem abaixo do botão exibir valores
+let resultado = document.getElementById("resultado") // mensagem da raiz da função
 
 const botaoValores = document.getElementById("btn-enviar");
 
@@ -23,28 +25,34 @@ botaoValores.addEventListener("click", (event) => {
 
         const metodo = escolherMetodo()
         if (metodo === "falsa-posicao") {
-            let raiz = falsaPosicao(a, b, iter, iterMax, erro)[0];
-            let y = falsaPosicao(a, b, iter, iterMax, erro)[1];
+            let [raiz, y, msg] = falsaPosicao(a, b, iter, iterMax, erro);
 
-            let resultado = document.getElementById("resultado")
-            resultado.innerText = "Raiz da função: " + raiz
+            mensagem.innerText = msg
+            if (raiz != "") {
+                resultado.innerText = "Raiz da função: " + raiz
+            }
+
             document.querySelector(".mensagem").textContent = ""
-            console.log(raiz)
-            if (typeof(raiz) === "number") {
+
+            if (typeof (raiz) === "number") {
                 grafico(raiz, y)
             }
-            
+
         }
 
         if (metodo === "secante") {
-            let raiz = secante(a, b, iter, iterMax, erro)[0];
-            let y = secante(a, b, iter, iterMax, erro)[1];
+            let [raiz, y, msg] = secante(a, b, iter, iterMax, erro);
 
-            let resultado = document.getElementById("resultado")
-            resultado.innerText = "Raiz da função: " + raiz
+            mensagem.innerText = msg
+            if (raiz != "") {
+                resultado.innerText = "Raiz da função: " + raiz
+            }
+
             document.querySelector(".mensagem").textContent = ""
 
-            grafico(raiz, y)
+            if (typeof (raiz) === "number") {
+                grafico(raiz, y)
+            }
         }
 
 
@@ -61,7 +69,6 @@ function guardarFuncao() {
     const funcaoInput = document.getElementById("funcaoInput").value;
 
     try {
-        // Usando math.js para interpretar a função como uma expressão matemática
         if (funcaoInput == "") {
             document.querySelector(".mensagem").classList.add("falha")
             document.querySelector(".mensagem").classList.remove("sucesso")
@@ -81,7 +88,6 @@ function guardarFuncao() {
 function resultadoFuncao(valor) {
     if (funcao) {
         try {
-            // Avaliar a função para o valor de x usando math.js
             const result = funcao.evaluate({ x: valor });
             return (result);
         } catch (error) {
@@ -93,8 +99,12 @@ function resultadoFuncao(valor) {
 }
 
 function escolherMetodo() {
-    const metodo = document.querySelector('input[name="metodo"]:checked').value;
-    return(metodo)
+    try {
+        const metodo = document.querySelector('input[name="metodo"]:checked').value;
+        return (metodo)
+    } catch (error) {
+        mensagem.innerText = "Escolha um método!"
+    }
 }
 
 function falsaPosicao(a, b, iter, iterMax, erro) {
@@ -103,18 +113,17 @@ function falsaPosicao(a, b, iter, iterMax, erro) {
     for (iter; iter <= iterMax; iter++) {
         let fa = resultadoFuncao(a);
         let fb = resultadoFuncao(b);
+        xAnterior = xAtual;
 
         if (fa * fb < 0) {
             xAtual = (a * fb - b * fa) / (fb - fa);
             let fx = resultadoFuncao(xAtual);
 
             if (iter > 0) {
-                if (Math.abs(xAtual - xAnterior) / xAtual < erro) {
-                    return ([xAtual, fx]);
+                if ((Math.abs(xAtual - xAnterior) / xAtual)*100 < erro) {
+                    return ([xAtual, fx, `Na ${iter}° iteração o erro é menor que o critério de parada: ${Math.abs(xAtual - xAnterior) / xAtual} < ${erro}`]);
                 }
             }
-
-            xAnterior = xAtual;
 
             if (fa * fx < 0) {
                 b = xAtual;
@@ -123,11 +132,11 @@ function falsaPosicao(a, b, iter, iterMax, erro) {
             }
 
         } else {
-            return (["Pontos inválidos, não possuem sinais opostos."]);
+            return (["", "", "Pontos inválidos, não possuem sinais opostos."]);
         }
     }
 
-    return (["Número máximo de iterações atingido."]);
+    return (["", "", `Número máximo de iterações atingido, porém o erro ainda é maior que o critério de parada: ${Math.abs(xAtual - xAnterior) / xAtual} > ${erro}`]);
 }
 
 function secante(a, b, iter, iterMax, erro) {
@@ -153,7 +162,7 @@ function grafico(raiz, y) {
             x: [raiz],
             y: [y],
             mode: 'markers+text',
-            marker: { color: 'red', size: 10 }, // Customize a cor e tamanho
+            marker: { color: 'red', size: 10 }, // Customizar a cor e tamanho
             text: `Ponto (${raiz}, ${y.toFixed(2)})`, // Exibir as coordenadas
             textposition: 'top center',
             hoverinfo: 'text'
@@ -161,8 +170,8 @@ function grafico(raiz, y) {
 
         const data = [trace1, mostrarRaiz]
         const layout = {
-            xaxis: { range: [-5, 5] },  // Ajuste o range do eixo x
-            yaxis: { range: [-1, 1] },  // Ajuste o range do eixo y
+            xaxis: { range: [-5, 5] },  // Ajustar o range do eixo x
+            yaxis: { range: [-1, 1] },  // Ajustar o range do eixo y
             showlegend: false
         };
         Plotly.newPlot('plot', data, layout, { scrollZoom: true, responsive: true });
