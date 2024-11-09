@@ -153,7 +153,7 @@ function falsaPosicao(a, b, iter, iterMax, erro) {
 
 function secante(xi, xiMenos1, iter, iterMax, erro) {
     let xiMais1;
-
+    let parada;
     for (iter; iter <= iterMax; iter++) {
         let fxi = resultadoFuncao(xi);
         let fxiMenos1 = resultadoFuncao(xiMenos1);
@@ -162,15 +162,17 @@ function secante(xi, xiMenos1, iter, iterMax, erro) {
         xiMais1 = xi - ((fxi) * (xi - xiMenos1)) / (fxi - fxiMenos1)
         let fxiMais1 = resultadoFuncao(xiMais1);
 
-        if ((Math.abs(xiMais1 - xi) / xiMais1) * 100 < erro) {
-            return ([xiMais1, fxiMais1, `Na ${iter}° iteração o erro é menor que o critério de parada: ${(Math.abs(xiMais1 - xi) / xiMais1)*100} < ${erro}`]);
+        parada = (Math.abs(xiMais1 - xi) / xiMais1) * 100
+
+        if (parada < erro) {
+            return ([xiMais1, fxiMais1, `Na ${iter}° iteração o erro é menor que o critério de parada: ${parada} < ${erro}`]);
         }
 
         xiMenos1 = xi
         xi = xiMais1
     }
 
-    return (["", "", `Número máximo de iterações atingido, porém o erro ainda é maior que o critério de parada: ${(Math.abs(xiMais1 - xi) / xiMais1)*100} > ${erro}`]);
+    return (["", "", `Número máximo de iterações atingido, porém o erro ainda é maior que o critério de parada: ${parada} > ${erro}`]);
 }
 
 function grafico(raiz, y) {
