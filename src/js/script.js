@@ -9,6 +9,7 @@ let mensagem = document.getElementById("resultado-mensagem") // mensagem abaixo 
 let resultado = document.getElementById("resultado") // mensagem da raiz da função
 
 const botaoValores = document.getElementById("btn-enviar");
+const divTabela = document.getElementById("tabela");
 
 botaoValores.addEventListener("click", (event) => {
     event.preventDefault();
@@ -120,20 +121,26 @@ function escolherMetodo() {
 }
 
 function falsaPosicao(a, b, iter, iterMax, erro) {
+    criaTabelaFalsaPos()
     let xAtual;
     let xAnterior;
+    let parada;
     for (iter; iter <= iterMax; iter++) {
         let fa = resultadoFuncao(a);
         let fb = resultadoFuncao(b);
         xAnterior = xAtual;
+        
 
         if (fa * fb < 0) {
             xAtual = (a * fb - b * fa) / (fb - fa);
             let fx = resultadoFuncao(xAtual);
+            parada = (Math.abs(xAtual - xAnterior) / xAtual) * 100
+
+            criaLinhaTabelaFalsaPos(iter, a, b, xAtual, fa, fb, fx, parada)
 
             if (iter > 0) {
-                if ((Math.abs(xAtual - xAnterior) / xAtual) * 100 < erro) {
-                    return ([xAtual, fx, `Na ${iter}° iteração o erro é menor que o critério de parada: ${(Math.abs(xAtual - xAnterior) / xAtual)*100} < ${erro}`]);
+                if (parada < erro) {
+                    return ([xAtual, fx, `Na ${iter}° iteração o erro é menor que o critério de parada: ${parada} < ${erro}`]);
                 }
             }
 
@@ -148,10 +155,11 @@ function falsaPosicao(a, b, iter, iterMax, erro) {
         }
     }
 
-    return (["", "", `Número máximo de iterações atingido, porém o erro ainda é maior que o critério de parada: ${(Math.abs(xAtual - xAnterior) / xAtual)*100} > ${erro}`]);
+    return (["", "", `Número máximo de iterações atingido, porém o erro ainda é maior que o critério de parada: ${parada} > ${erro}`]);
 }
 
 function secante(xi, xiMenos1, iter, iterMax, erro) {
+    criaTabelaSecante()
     let xiMais1;
     let parada;
     for (iter; iter <= iterMax; iter++) {
@@ -163,6 +171,8 @@ function secante(xi, xiMenos1, iter, iterMax, erro) {
         let fxiMais1 = resultadoFuncao(xiMais1);
 
         parada = (Math.abs(xiMais1 - xi) / xiMais1) * 100
+
+        criaLinhaTabelaSecante(iter, xiMenos1, xi, fxiMenos1, fxi, xiMais1, erro)
 
         if (parada < erro) {
             return ([xiMais1, fxiMais1, `Na ${iter}° iteração o erro é menor que o critério de parada: ${parada} < ${erro}`]);
@@ -212,4 +222,80 @@ function grafico(raiz, y) {
         console.error(err)
         alert(err)
     }
+}
+
+function criaTabelaFalsaPos() {
+    divTabela.innerHTML = ""
+    const cabecalho = document.createElement("tr")
+
+    cabecalho.innerHTML = (
+        `
+        <th>i</th>
+        <th>a</th>
+        <th>b</th>
+        <th>xi</th>
+        <th>f(a)</th>
+        <th>f(b)</th>
+        <th>f(xi)</th>
+        <th>(xAtual - xAnterior) / xAtual)</th>
+        `
+    )
+
+    divTabela.appendChild(cabecalho)
+}
+
+function criaLinhaTabelaFalsaPos(i, a, b, xi, fa, fb, fx, erro) {
+    const linha = document.createElement("tr")
+
+    linha.innerHTML = (
+        `
+        <td>${i}</td>
+        <td>${a}</td>
+        <td>${b}</td>
+        <td>${xi}</td>
+        <td>${fa}</td>
+        <td>${fb}</td>
+        <td>${fx}</td>
+        <td>${erro}</td>
+        `
+    )
+
+    divTabela.appendChild(linha)
+}
+
+function criaTabelaSecante() {
+    divTabela.innerHTML = ""
+    const cabecalho = document.createElement("tr")
+
+    cabecalho.innerHTML = (
+        `
+        <th>i</th>
+        <th>xi-1</th>
+        <th>xi</th>
+        <th>f(xi-1)</th>
+        <th>f(xi)</th>
+        <th>xi+1</th>
+        <th>(xi+1 - xi) / xi+1)</th>
+        `
+    )
+
+    divTabela.appendChild(cabecalho)
+}
+
+function criaLinhaTabelaSecante(i, xiMenos1, xi, fxiMenos1, fxi, xiMais1, erro) {
+    const linha = document.createElement("tr")
+
+    linha.innerHTML = (
+        `
+        <td>${i}</td>
+        <td>${xiMenos1}</td>
+        <td>${xi}</td>
+        <td>${fxiMenos1}</td>
+        <td>${fxi}</td>
+        <td>${xiMais1}</td>
+        <td>${erro}</td>
+        `
+    )
+
+    divTabela.appendChild(linha)
 }
