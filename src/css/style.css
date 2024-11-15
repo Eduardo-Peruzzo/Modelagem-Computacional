@@ -3,7 +3,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* height: 100vh; */
     margin: 0;
     background-color: #f0f0f0;
 }
@@ -16,7 +15,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 50%;
+    width: 100%;
+    @media screen and (min-width: 768px) {
+        width: 50%;
+    }
 }
 
 .mensagem {
@@ -37,7 +39,6 @@ h1 {
 #container-principal {
     display: flex;
     flex-direction: column;
-    /* justify-content: space-evenly; */
     width: 100%;
 }
 
@@ -52,28 +53,37 @@ h1 {
 
 #div-funcao {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
     width: 100%;
+    @media screen and (min-width: 768px) {
+        flex-direction: row;
+    }
 }
 
 #funcao {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    width: 50%;
+    width: 100%;
     align-items: center;
     min-height: 12em;
+    @media screen and (min-width: 768px) {
+        width: 50%;
+    }
 }
 
 #metodo {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    width: 50%;
+    width: 100%;
     align-items: center;
     min-height: 12em;
+    @media screen and (min-width: 768px) {
+        width: 50%;
+    }
 }
 
 #falsa-posicao {
@@ -96,7 +106,10 @@ input,
 button {
     margin: 10px 0;
     padding: 8px;
-    width: 80%;
+    width: 90%;
+    @media screen and (min-width: 768px) {
+        width: 80%;
+    }
 }
 
 button {
@@ -111,10 +124,13 @@ button:hover {
 }
 
 form {
-    width: 60%;
+    width: 100%;
     display: flex;
     align-items: center;
     flex-direction: column;
+    @media screen and (min-width: 768px) {
+        width: 60%;
+    }
 }
 
 h2 {
@@ -179,4 +195,14 @@ td:last-child {
 
 tr:last-child td {
   border-bottom-width: 0;
+}
+
+@media screen and (max-width: 768px) {
+    p {
+        width: 90%;
+        margin: 10px auto;
+    }
+    table {
+        width: 90%;
+    }
 }
