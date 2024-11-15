@@ -129,12 +129,13 @@ function falsaPosicao(a, b, iter, iterMax, erro) {
         let fa = resultadoFuncao(a);
         let fb = resultadoFuncao(b);
         xAnterior = xAtual;
-        
+
 
         if (fa * fb < 0) {
             xAtual = (a * fb - b * fa) / (fb - fa);
             let fx = resultadoFuncao(xAtual);
-            parada = (Math.abs(xAtual - xAnterior) / xAtual) * 100
+            parada = (Math.abs((xAtual - xAnterior) / xAtual)) * 100
+            console.log(parada)
 
             criaLinhaTabelaFalsaPos(iter, a, b, xAtual, fa, fb, fx, parada)
 
@@ -170,7 +171,7 @@ function secante(xi, xiMenos1, iter, iterMax, erro) {
         xiMais1 = xi - ((fxi) * (xi - xiMenos1)) / (fxi - fxiMenos1)
         let fxiMais1 = resultadoFuncao(xiMais1);
 
-        parada = (Math.abs(xiMais1 - xi) / xiMais1) * 100
+        parada = (Math.abs((xiMais1 - xi) / xiMais1)) * 100
 
         criaLinhaTabelaSecante(iter, xiMenos1, xi, fxiMenos1, fxi, xiMais1, erro)
 
